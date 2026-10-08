@@ -1,0 +1,2233 @@
+{
+  "name": "Consultorio - Reserva de Turnos IA",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Solicitud de Turno Médico",
+        "formDescription": "Completá tus datos y te enviaremos la confirmación por mail.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "nombre"
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "telefono"
+            },
+            {
+              "fieldLabel": "Fecha Preferida",
+              "fieldType": "date"
+            },
+            {
+              "fieldLabel": "Horario Preferido",
+              "placeholder": "Ej: 10:30"
+            },
+            {
+              "fieldLabel": "=Motivo",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -608,
+        -448
+      ],
+      "id": "f4eacdbb-1524-4b50-ade7-a3d47df260ad",
+      "name": "Formulario Solicitud Turno",
+      "webhookId": "531beb6e-0ac3-4d52-80da-701bbbc030f8"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ff951d30-d4a0-4bc0-b5ab-9afac7675221",
+              "leftValue": "={{ $json.nombre }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "888959c9-17d1-4841-aaa3-09c6f8c1d6e0",
+              "leftValue": "={{ $json.Email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "1b5e7e17-ccc9-4df2-ae09-29a43f359b28",
+              "leftValue": "={{ $json.telefono }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "be9f371b-d1c4-4f47-9b60-5f77f1994c2e",
+              "leftValue": "={{ $json.Motivo }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "dc1f669a-3c26-495f-bd7a-df8d9ad06b7a",
+              "leftValue": "={{ $json['Fecha Preferida'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "98a2b123-9366-4014-b04b-acb002a6ad7b",
+              "leftValue": "={{ $json['Horario Preferido'] }}",
+              "rightValue": "^([01]\\d|2[0-3]):[0-5]\\d$",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -416,
+        -240
+      ],
+      "id": "ba6e31d0-8c99-4e96-9aa8-4346f89d0e7c",
+      "name": "Validar Datos Completos"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "appXJnLgFXvdLNMBf",
+          "mode": "list",
+          "cachedResultName": "Consultorio Médico - Gestión de Turnos.",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblkrToj4LSSFapEI",
+          "mode": "list",
+          "cachedResultName": "Pacientes",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf/tblkrToj4LSSFapEI"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Formulario Solicitud Turno').item.json.Email }}",
+            "Nombre": "={{ $('Formulario Solicitud Turno').item.json.nombre }}",
+            "Teléfono": "={{ $('Formulario Solicitud Turno').item.json.telefono }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Teléfono",
+              "displayName": "Teléfono",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Turnos",
+              "displayName": "Turnos",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -256,
+        -448
+      ],
+      "id": "07075570-c6f4-4e04-91b0-cbd602fa0743",
+      "name": "Guardar Paciente",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "nD0voQurNIKDMH9U",
+          "name": "Airtable - Consultorio 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appXJnLgFXvdLNMBf",
+          "mode": "list",
+          "cachedResultName": "Consultorio Médico - Gestión de Turnos.",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQzaGI9CSBfjIGf",
+          "mode": "list",
+          "cachedResultName": "Turnos",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf/tblQzaGI9CSBfjIGf"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Paciente": "={{ [$json.id] }}",
+            "Motivo": "={{ $('Formulario Solicitud Turno').item.json.Motivo }}",
+            "Fecha Solicitada": "={{ $('Formulario Solicitud Turno').item.json['Fecha Preferida'] + 'T' + $('Formulario Solicitud Turno').item.json['Horario Preferido'] + ':00-03:00' }}",
+            "Estado": "Pendiente"
+          },
+          "matchingColumns": [
+            "Paciente"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "ID Turno",
+              "displayName": "ID Turno",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Paciente",
+              "displayName": "Paciente",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Motivo",
+              "displayName": "Motivo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha Solicitada",
+              "displayName": "Fecha Solicitada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha Propuesta",
+              "displayName": "Fecha Propuesta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje IA",
+              "displayName": "Mensaje IA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tipo de Horario",
+              "displayName": "Tipo de Horario",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Solicitado",
+                  "value": "Solicitado"
+                },
+                {
+                  "name": "Alternativo",
+                  "value": "Alternativo"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ID Evento Calendar",
+              "displayName": "ID Evento Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Creado",
+              "displayName": "Creado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Log de Errores",
+              "displayName": "Log de Errores",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -112,
+        -448
+      ],
+      "id": "770b8c00-9c3d-48e2-992a-f0ef11ce1de0",
+      "name": "Crear Turno",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "nD0voQurNIKDMH9U",
+          "name": "Airtable - Consultorio 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appXJnLgFXvdLNMBf",
+          "mode": "list",
+          "cachedResultName": "Consultorio Médico - Gestión de Turnos.",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPmelURnxv7aTM7",
+          "mode": "list",
+          "cachedResultName": "Configuración",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf/tblPmelURnxv7aTM7"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        -448
+      ],
+      "id": "544b6d15-accd-4f1e-bff3-3c6d726be101",
+      "name": "Leer Configuración",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "nD0voQurNIKDMH9U",
+          "name": "Airtable - Consultorio 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = {};\n\nfor (const item of $input.all()) {\n  const f = item.json.fields || item.json;\n  config[f.Clave] = f.Valor;\n}\n\nconfig.duracion_turno_min = Number(config.duracion_turno_min);\nconfig.dias_busqueda_alternativa = Number(config.dias_busqueda_alternativa);\n\nreturn [{ json: config }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        -448
+      ],
+      "id": "3bc35d48-78b8-496a-bbab-ac3ebe0df176",
+      "name": "Armar Configuración"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "leanweimann@gmail.com",
+          "mode": "list",
+          "cachedResultName": "leanweimann@gmail.com"
+        },
+        "limit": 100,
+        "timeMin": "={{ DateTime.fromISO($('Formulario Solicitud Turno').item.json['Fecha Preferida'], {zone: 'America/Argentina/Buenos_Aires'}).startOf('day').toISO() }}",
+        "timeMax": "={{ DateTime.fromISO($('Formulario Solicitud Turno').item.json['Fecha Preferida'], {zone: 'America/Argentina/Buenos_Aires'}).plus({days: $('Armar Configuración').item.json.dias_busqueda_alternativa + 1}).toISO() }}",
+        "options": {
+          "orderBy": "startTime",
+          "recurringEventHandling": "=expand",
+          "timeZone": {
+            "__rl": true,
+            "value": "America/Argentina/Buenos_Aires",
+            "mode": "list",
+            "cachedResultName": "America/Argentina/Buenos_Aires"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        352,
+        -448
+      ],
+      "id": "0020a80d-ba14-43a4-86ea-7520cf58eae8",
+      "name": "Consultar Agenda",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "B5F2YCjnfHmTkhrN",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ZONA = 'America/Argentina/Buenos_Aires';\nconst nombresDia = ['', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];\n\n// Solo eventos reales (ignora el item vacío cuando la agenda no tiene nada)\nconst ocupados = $input.all()\n  .map(i => i.json)\n  .filter(e => e.start && (e.start.dateTime || e.start.date))\n  .map(e => ({\n    inicio: e.start.dateTime || e.start.date,\n    fin: e.end.dateTime || e.end.date,\n  }));\n\nconst cfg = $('Armar Configuración').first().json;\nconst form = $('Formulario Solicitud Turno').first().json;\nconst turno = $('Crear Turno').first().json;\n\n// Días de atención desde la configuración (1 = lunes ... 7 = domingo)\nconst diasAtencion = String(cfg.dias_atencion).split(',').map(d => Number(d.trim()));\n\nconst fechaSolicitada = DateTime.fromISO(\n  `${form['Fecha Preferida']}T${form['Horario Preferido']}:00`,\n  { zone: ZONA }\n);\n\n// Lista de días válidos para proponer (ya sin fines de semana)\nconst diasDisponibles = [];\nfor (let i = 0; i <= cfg.dias_busqueda_alternativa; i++) {\n  const d = fechaSolicitada.startOf('day').plus({ days: i });\n  if (diasAtencion.includes(d.weekday)) {\n    diasDisponibles.push(`${d.toISODate()} (${nombresDia[d.weekday]})`);\n  }\n}\n\nreturn [{\n  json: {\n    turno_id: turno.id,\n    paciente: form.nombre,\n    motivo: form.Motivo,\n    fecha_solicitada: fechaSolicitada.toISO(),\n    dia_semana_solicitado: nombresDia[fechaSolicitada.weekday],\n    dia_solicitado_es_de_atencion: diasAtencion.includes(fechaSolicitada.weekday),\n    dias_de_atencion_disponibles: diasDisponibles.join(', '),\n    hora_inicio_atencion: cfg.hora_inicio_atencion,\n    hora_fin_atencion: cfg.hora_fin_atencion,\n    duracion_turno_min: cfg.duracion_turno_min,\n    dias_busqueda_alternativa: cfg.dias_busqueda_alternativa,\n    cantidad_ocupados: ocupados.length,\n    ocupados: JSON.stringify(ocupados),\n  },\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        -448
+      ],
+      "id": "ebdbc1db-c7e6-4d76-bf62-23a95238d176",
+      "name": "Preparar Datos IA"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Paciente: {{ $json.paciente }}\nMotivo de consulta: {{ $json.motivo }}\nHorario solicitado: {{ $json.fecha_solicitada }}\nDía de la semana del horario solicitado: {{ $json.dia_semana_solicitado }}\n¿Es día de atención?: {{ $json.dia_solicitado_es_de_atencion ? 'Sí' : 'No' }}\nFechas de atención permitidas para proponer: {{ $json.dias_de_atencion_disponibles }}\nHorario de atención: de {{ $json.hora_inicio_atencion }} a {{ $json.hora_fin_atencion }}\nDuración del turno: {{ $json.duracion_turno_min }} minutos\nIntervalos ocupados (JSON): {{ $json.ocupados }}\n\nProponé el turno siguiendo las reglas.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Sos el asistente de agenda de un consultorio médico en Argentina. Todos los horarios están en zona horaria America/Argentina/Buenos_Aires (UTC-3).\n\nTu tarea es proponer un horario de turno siguiendo estas reglas:\n1. Cada turno dura la cantidad de minutos indicada y debe empezar y terminar dentro del horario de atención. Se atiende de lunes a viernes.\n2. Un horario está libre si no se superpone con ningún intervalo ocupado.\n3. Si el horario solicitado está libre y dentro del horario de atención, devolvé tipo_horario \"Solicitado\" con ese mismo horario.\n4. Si está ocupado o fuera de atención, buscá el próximo horario libre (primero el mismo día, después los días siguientes) dentro de los días de búsqueda indicados, y devolvé tipo_horario \"Alternativo\".\n5. Si no hay ningún horario libre en ese período, devolvé tipo_horario \"Sin Disponibilidad, este horario ya esta agendado en otra cita\" y fecha_propuesta vacía.\n6. Usá solamente la información provista. No inventes datos.\n7. En \"mensaje\" explicá en una o dos frases, para la secretaria, por qué motivo te quieres hacer atender y que problema tenes (ej; dolor estomacal)\n8. Respondé únicamente en el formato JSON pedido.\n10. El campo \"tipo_horario\" debe contener EXACTAMENTE una de estas tres opciones, sin ningún texto adicional: Solicitado, Alternativo o Sin Disponibilidad. Cualquier explicación o motivo va únicamente en el campo \"mensaje\"."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        704,
+        -256
+      ],
+      "id": "8f0ea0aa-5e0a-4439-b06a-c885a00aec1f",
+      "name": "Agente Agenda Claude",
+      "onError": "continueErrorOutput",
+      "notes": "al generar un error continua generando la ruta de error"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-sonnet-4-5-20250929",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {
+          "maxTokensToSample": 1000,
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        576,
+        -48
+      ],
+      "id": "b60a3d96-f561-44bc-bc90-2ba710f906ac",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "F8Qdy4ZwDFKPHVYW",
+          "name": "Anthropic - Consultorio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tipo_horario\": {\n      \"type\": \"string\",\n      \"enum\": [\"Solicitado\", \"Alternativo\", \"Sin Disponibilidad\"]\n    },\n    \"fecha_propuesta\": {\n      \"type\": \"string\"\n    },\n    \"mensaje\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\"tipo_horario\", \"fecha_propuesta\", \"mensaje\"]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        896,
+        -48
+      ],
+      "id": "a7b2b4d5-34a2-4ea0-bccd-2ab2130a5b25",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "88e41419-4663-45c7-a4c7-fe4dc07352db",
+              "leftValue": "={{ $json.output.tipo_horario }}",
+              "rightValue": "Sin Disponibilidad",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1024,
+        -416
+      ],
+      "id": "de000f2a-0aa3-40d2-b9f2-8dccd409878c",
+      "name": "¿Hay Horario Disponible?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appXJnLgFXvdLNMBf",
+          "mode": "list",
+          "cachedResultName": "Consultorio Médico - Gestión de Turnos.",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQzaGI9CSBfjIGf",
+          "mode": "list",
+          "cachedResultName": "Turnos",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf/tblQzaGI9CSBfjIGf"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Mensaje IA": "={{ $('Agente Agenda Claude').item.json.output.mensaje }}",
+            "Tipo de Horario": "={{ $('Agente Agenda Claude').item.json.output.tipo_horario }}",
+            "Estado": "Procesado por IA",
+            "Fecha Propuesta": "={{ $('Agente Agenda Claude').item.json.output.fecha_propuesta }}",
+            "id": "={{ $('Preparar Datos IA').item.json.turno_id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "ID Turno",
+              "displayName": "ID Turno",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Paciente",
+              "displayName": "Paciente",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Motivo",
+              "displayName": "Motivo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha Solicitada",
+              "displayName": "Fecha Solicitada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha Propuesta",
+              "displayName": "Fecha Propuesta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Mensaje IA",
+              "displayName": "Mensaje IA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo de Horario",
+              "displayName": "Tipo de Horario",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Solicitado",
+                  "value": "Solicitado"
+                },
+                {
+                  "name": "Alternativo",
+                  "value": "Alternativo"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ID Evento Calendar",
+              "displayName": "ID Evento Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Creado",
+              "displayName": "Creado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Log de Errores",
+              "displayName": "Log de Errores",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1216,
+        -528
+      ],
+      "id": "edf15a41-9ba9-48de-be56-e52c30963c1f",
+      "name": "Guardar Propuesta IA",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "nD0voQurNIKDMH9U",
+          "name": "Airtable - Consultorio 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appXJnLgFXvdLNMBf",
+          "mode": "list",
+          "cachedResultName": "Consultorio Médico - Gestión de Turnos.",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQzaGI9CSBfjIGf",
+          "mode": "list",
+          "cachedResultName": "Turnos",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf/tblQzaGI9CSBfjIGf"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Preparar Datos IA').item.json.turno_id }}",
+            "Mensaje IA": "={{ $('Agente Agenda Claude').item.json.output.mensaje }}",
+            "Tipo de Horario": "Sin Disponibilidad",
+            "Estado": "Sin Disponibilidad"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "ID Turno",
+              "displayName": "ID Turno",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Paciente",
+              "displayName": "Paciente",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Motivo",
+              "displayName": "Motivo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha Solicitada",
+              "displayName": "Fecha Solicitada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha Propuesta",
+              "displayName": "Fecha Propuesta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje IA",
+              "displayName": "Mensaje IA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo de Horario",
+              "displayName": "Tipo de Horario",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Solicitado",
+                  "value": "Solicitado"
+                },
+                {
+                  "name": "Alternativo",
+                  "value": "Alternativo"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ID Evento Calendar",
+              "displayName": "ID Evento Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Creado",
+              "displayName": "Creado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Log de Errores",
+              "displayName": "Log de Errores",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1216,
+        -304
+      ],
+      "id": "863c919e-c48f-48d4-a999-a54029ee8c85",
+      "name": "Guardar Sin Disponibilidad",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "nD0voQurNIKDMH9U",
+          "name": "Airtable - Consultorio 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "={{ $('Armar Configuración').item.json.email_aprobador }}",
+        "subject": "=Aprobar turno: {{ $('Preparar Datos IA').item.json.paciente }}",
+        "message": "=Hay una solicitud de turno pendiente de aprobación.\n\nPaciente: {{ $('Preparar Datos IA').item.json.paciente }}\nMotivo: {{ $('Preparar Datos IA').item.json.motivo }}\nHorario pedido: {{ DateTime.fromISO($('Preparar Datos IA').item.json.fecha_solicitada, {zone: 'America/Argentina/Buenos_Aires'}).setLocale('es').toFormat(\"cccc dd/MM/yyyy 'a las' HH:mm\") }}\nHorario propuesto: {{ DateTime.fromISO($('Agente Agenda Claude').item.json.output.fecha_propuesta, {zone: 'America/Argentina/Buenos_Aires'}).setLocale('es').toFormat(\"cccc dd/MM/yyyy 'a las' HH:mm\") }}\nTipo de horario: {{ $('Agente Agenda Claude').item.json.output.tipo_horario }}\n\nAnálisis del asistente:\n{{ $('Agente Agenda Claude').item.json.output.mensaje }}\n\nSi aprobás, el paciente recibirá la citación.",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "Aprobar turno",
+            "disapproveLabel": "Rechazar"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 3,
+              "resumeUnit": "days"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1424,
+        -528
+      ],
+      "id": "270d0fe0-371d-460c-a1bb-d2493b6d4a17",
+      "name": "HITL - Aprobación Turno",
+      "webhookId": "d7bd17da-7293-4c26-9de3-24402fd3d42b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lmSkip8mrs5vbfR3",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fc1cfe7b-3287-45df-8297-2636727e2c4e",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1616,
+        -528
+      ],
+      "id": "14a2dc5a-fd2a-42b7-a97a-6e801d5e6b7f",
+      "name": "¿Turno Aprobado?"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "leanweimann@gmail.com",
+          "mode": "list",
+          "cachedResultName": "leanweimann@gmail.com"
+        },
+        "start": "={{ $('Agente Agenda Claude').item.json.output.fecha_propuesta }}",
+        "end": "={{ DateTime.fromISO($('Agente Agenda Claude').item.json.output.fecha_propuesta).plus({minutes: $('Armar Configuración').item.json.duracion_turno_min}).toISO() }}",
+        "additionalFields": {
+          "description": "=Motivo: {{ $('Preparar Datos IA').item.json.motivo }}",
+          "summary": "=Turno: {{ $('Preparar Datos IA').item.json.paciente }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1808,
+        -672
+      ],
+      "id": "34fb510a-3195-46af-b778-17a9bdfe3308",
+      "name": "Crear Evento en Calendario",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "B5F2YCjnfHmTkhrN",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Formulario Solicitud Turno').item.json.Email }}",
+        "subject": "=Confirmación de tu turno médico",
+        "emailType": "text",
+        "message": "=Hola {{ $('Preparar Datos IA').item.json.paciente }},\n\nTu turno fue confirmado:\n\nFecha y hora: {{ DateTime.fromISO($('Agente Agenda Claude').item.json.output.fecha_propuesta, {zone: 'America/Argentina/Buenos_Aires'}).setLocale('es').toFormat(\"cccc dd/MM/yyyy 'a las' HH:mm\") }} hs\nMotivo: {{ $('Preparar Datos IA').item.json.motivo }}\n\nAnte cualquier consulta podés comunicarte con el consultorio al {{ $('Armar Configuración').item.json.telefono_clinica }}.\n\nRecorda llegar unos minutos antes de la hora citada, los turnos son dados en la hora acordada, solo poseemos un margen de 5 minutos de tolerancia, sepa entender.\n\nTe esperamos.\nGRACIAS POR ELEGIRNOS.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1984,
+        -672
+      ],
+      "id": "3ca04b8a-f0f5-4617-9b8e-16463999ddb7",
+      "name": "Enviar Citación Paciente",
+      "webhookId": "d0cd645e-f9ea-43c5-b762-d20466824341",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lmSkip8mrs5vbfR3",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appXJnLgFXvdLNMBf",
+          "mode": "list",
+          "cachedResultName": "Consultorio Médico - Gestión de Turnos.",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQzaGI9CSBfjIGf",
+          "mode": "list",
+          "cachedResultName": "Turnos",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf/tblQzaGI9CSBfjIGf"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Preparar Datos IA').item.json.turno_id }}",
+            "Estado": "Aprobado por Humano",
+            "ID Evento Calendar": "={{ $('Crear Evento en Calendario').item.json.id }}",
+            "Thread ID Gmail": "={{ $('Enviar Citación Paciente').item.json.threadId }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "ID Turno",
+              "displayName": "ID Turno",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Paciente",
+              "displayName": "Paciente",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Motivo",
+              "displayName": "Motivo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha Solicitada",
+              "displayName": "Fecha Solicitada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha Propuesta",
+              "displayName": "Fecha Propuesta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje IA",
+              "displayName": "Mensaje IA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tipo de Horario",
+              "displayName": "Tipo de Horario",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Solicitado",
+                  "value": "Solicitado"
+                },
+                {
+                  "name": "Alternativo",
+                  "value": "Alternativo"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ID Evento Calendar",
+              "displayName": "ID Evento Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Creado",
+              "displayName": "Creado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Log de Errores",
+              "displayName": "Log de Errores",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Thread ID Gmail",
+              "displayName": "Thread ID Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        2192,
+        -672
+      ],
+      "id": "97d9f5e1-9819-47a4-b2fa-da66f0f06a80",
+      "name": "Marcar Turno Aprobado",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "nD0voQurNIKDMH9U",
+          "name": "Airtable - Consultorio 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appXJnLgFXvdLNMBf",
+          "mode": "list",
+          "cachedResultName": "Consultorio Médico - Gestión de Turnos.",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQzaGI9CSBfjIGf",
+          "mode": "list",
+          "cachedResultName": "Turnos",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf/tblQzaGI9CSBfjIGf"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Preparar Datos IA').item.json.turno_id }}",
+            "Estado": "Rechazado"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "ID Turno",
+              "displayName": "ID Turno",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Paciente",
+              "displayName": "Paciente",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Motivo",
+              "displayName": "Motivo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha Solicitada",
+              "displayName": "Fecha Solicitada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha Propuesta",
+              "displayName": "Fecha Propuesta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mensaje IA",
+              "displayName": "Mensaje IA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tipo de Horario",
+              "displayName": "Tipo de Horario",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Solicitado",
+                  "value": "Solicitado"
+                },
+                {
+                  "name": "Alternativo",
+                  "value": "Alternativo"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Procesado por IA",
+                  "value": "Procesado por IA"
+                },
+                {
+                  "name": "Aprobado por Humano",
+                  "value": "Aprobado por Humano"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Sin Disponibilidad",
+                  "value": "Sin Disponibilidad"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ID Evento Calendar",
+              "displayName": "ID Evento Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Creado",
+              "displayName": "Creado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Log de Errores",
+              "displayName": "Log de Errores",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Thread ID Gmail",
+              "displayName": "Thread ID Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1776,
+        -336
+      ],
+      "id": "4f5e11d7-6793-488c-b585-5fb09651ed9b",
+      "name": "Marcar Turno Rechazado",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "nD0voQurNIKDMH9U",
+          "name": "Airtable - Consultorio 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Formulario Solicitud Turno').item.json.Email }}",
+        "subject": "=Sobre tu solicitud de turno",
+        "message": "=Hola {{ $('Preparar Datos IA').item.json.paciente }},\n\nPor el momento no tenemos horarios disponibles para tu solicitud. Para coordinar un turno, comunicate con el consultorio al {{ $('Armar Configuración').item.json.telefono_clinica }}, de {{ $('Armar Configuración').item.json.dias_atencion_texto }}, de {{ $('Armar Configuración').item.json.hora_inicio_atencion }} a {{ $('Armar Configuración').item.json.hora_fin_atencion }} hs.\n\nGracias por tu paciencia.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        -304
+      ],
+      "id": "d46e1b42-e7ac-4963-a9e6-25b115394030",
+      "name": "Avisar Sin Disponibilidad",
+      "webhookId": "5001705f-4a1d-420e-9b7c-5cf15df1050c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lmSkip8mrs5vbfR3",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appXJnLgFXvdLNMBf",
+          "mode": "list",
+          "cachedResultName": "Consultorio Médico - Gestión de Turnos.",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblk5ZZ4GFPfyPzwT",
+          "mode": "list",
+          "cachedResultName": "Log de Errores",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf/tblk5ZZ4GFPfyPzwT"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nodo": "=Agente Agenda Claude",
+            "Mensaje de Error": "={{ typeof $json.error === 'string' ? $json.error : JSON.stringify($json.error) }}",
+            "Turno": "={{ [$('Preparar Datos IA').item.json.turno_id] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID Error",
+              "displayName": "ID Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Nodo",
+              "displayName": "Nodo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Mensaje de Error",
+              "displayName": "Mensaje de Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Turno",
+              "displayName": "Turno",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        -144
+      ],
+      "id": "9135b1ca-9cb5-4b68-8b9c-be0fe207dbeb",
+      "name": "Registrar Error IA",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "nD0voQurNIKDMH9U",
+          "name": "Airtable - Consultorio 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appXJnLgFXvdLNMBf",
+          "mode": "list",
+          "cachedResultName": "Consultorio Médico - Gestión de Turnos.",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblk5ZZ4GFPfyPzwT",
+          "mode": "list",
+          "cachedResultName": "Log de Errores",
+          "cachedResultUrl": "https://airtable.com/appXJnLgFXvdLNMBf/tblk5ZZ4GFPfyPzwT"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nodo": "Validar Datos Completos",
+            "Mensaje de Error": "=Datos incompletos o con formato inválido: {{ JSON.stringify($json) }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID Error",
+              "displayName": "ID Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Nodo",
+              "displayName": "Nodo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Mensaje de Error",
+              "displayName": "Mensaje de Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Turno",
+              "displayName": "Turno",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        656,
+        160
+      ],
+      "id": "29409b74-8122-4e21-b6b3-962576ab21fe",
+      "name": "Registrar Datos Incompletos",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "nD0voQurNIKDMH9U",
+          "name": "Airtable - Consultorio 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=   {{ $if($('Armar Configuración').isExecuted, $('Armar Configuración').item.json.email_aprobador, 'jipyweimann@gmail.com') }}",
+        "subject": "=Alerta: falló {{ $json.fields.Nodo }}",
+        "message": "=Se registró un error en el flujo de turnos. Nodo: {{ $json.fields.Nodo }}. Detalle: {{ $json.fields['Mensaje de Error'] }}. Revisá la tabla Log de Errores en Airtable.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        -64
+      ],
+      "id": "82f4eb5e-043f-45b2-abb0-4ce2ccd34871",
+      "name": "Alerta Error por Mail",
+      "webhookId": "7a2267fb-0a1b-4f3c-a2f5-26eb2e874a79",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lmSkip8mrs5vbfR3",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Formulario Solicitud Turno').item.json.Email }}",
+        "subject": "=Tu solicitud de turno no pudo registrarse",
+        "emailType": "text",
+        "message": "=Hola {{ $('Preparar Datos IA').item.json.paciente }},\n\nLamentablemente tu solicitud de turno no pudo registrarse correctamente.\n\nPara coordinar un nuevo turno, comunicate telefónicamente con el consultorio al {{ $('Armar Configuración').item.json.telefono_clinica }}, de {{ $('Armar Configuración').item.json.dias_atencion_texto }}, de {{ $('Armar Configuración').item.json.hora_inicio_atencion }} a {{ $('Armar Configuración').item.json.hora_fin_atencion }} hs.\n\nDisculpá las molestias.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2000,
+        -336
+      ],
+      "id": "9202e43e-ffd2-4a24-b8c5-cccf621d871a",
+      "name": "Avisar Turno Rechazado",
+      "webhookId": "ad4d752f-bbff-4aca-bd66-1caafa76f695",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lmSkip8mrs5vbfR3",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Formulario Solicitud Turno": {
+      "main": [
+        [
+          {
+            "node": "Validar Datos Completos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Datos Completos": {
+      "main": [
+        [
+          {
+            "node": "Guardar Paciente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registrar Datos Incompletos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardar Paciente": {
+      "main": [
+        [
+          {
+            "node": "Crear Turno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Turno": {
+      "main": [
+        [
+          {
+            "node": "Leer Configuración",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Configuración": {
+      "main": [
+        [
+          {
+            "node": "Armar Configuración",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar Configuración": {
+      "main": [
+        [
+          {
+            "node": "Consultar Agenda",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Agenda": {
+      "main": [
+        [
+          {
+            "node": "Preparar Datos IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Datos IA": {
+      "main": [
+        [
+          {
+            "node": "Agente Agenda Claude",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Agenda Claude",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Agente Agenda Claude",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente Agenda Claude": {
+      "main": [
+        [
+          {
+            "node": "¿Hay Horario Disponible?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registrar Error IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Hay Horario Disponible?": {
+      "main": [
+        [
+          {
+            "node": "Guardar Propuesta IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Guardar Sin Disponibilidad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardar Propuesta IA": {
+      "main": [
+        [
+          {
+            "node": "HITL - Aprobación Turno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HITL - Aprobación Turno": {
+      "main": [
+        [
+          {
+            "node": "¿Turno Aprobado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Turno Aprobado?": {
+      "main": [
+        [
+          {
+            "node": "Crear Evento en Calendario",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Marcar Turno Rechazado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Evento en Calendario": {
+      "main": [
+        [
+          {
+            "node": "Enviar Citación Paciente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Citación Paciente": {
+      "main": [
+        [
+          {
+            "node": "Marcar Turno Aprobado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardar Sin Disponibilidad": {
+      "main": [
+        [
+          {
+            "node": "Avisar Sin Disponibilidad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Error IA": {
+      "main": [
+        [
+          {
+            "node": "Alerta Error por Mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Datos Incompletos": {
+      "main": [
+        [
+          {
+            "node": "Alerta Error por Mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar Turno Rechazado": {
+      "main": [
+        [
+          {
+            "node": "Avisar Turno Rechazado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7327562f-7936-44b7-abeb-6466a0b9dbba",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e70132d2512e6c691158cb69e09dc85f3f2f5de406c98a23681da049f322ddf6"
+  },
+  "nodeGroups": [],
+  "id": "HKBSy1XCmpKbbT2m",
+  "tags": []
+}
